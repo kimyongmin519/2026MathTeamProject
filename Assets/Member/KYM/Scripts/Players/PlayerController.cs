@@ -31,7 +31,7 @@ namespace Member.KYM.Scripts.Players
         // 제자리 회전을 막기 위해 조향을 허용하기 시작하는 최소 속도
         [SerializeField, Min(0f)] private float minimumSpeedToSteer = 0.4f;
         // 드리프트 중 일반 조향력에 곱하는 회전 배율
-        [SerializeField, Min(1f)] private float driftSteeringMultiplier = 1.25f;
+        [SerializeField, Min(1f)] private float driftSteeringMultiplier = 1.8f;
 
         [Header("Grip & Drift")]
         // 일반 주행 중 옆으로 미끄러지는 속도를 줄이는 접지력
@@ -93,6 +93,28 @@ namespace Member.KYM.Scripts.Players
         // 부스터 중 적용되는 최대 전진 속도
         [SerializeField, Min(0.1f)] private float boostMaxSpeed = 38f;
 
+        [Header("Particle Effects")]
+        // 부스터가 유지되는 동안 재생할 파티클. 자식 파티클도 함께 재생한다.
+        [SerializeField] private ParticleSystem boostParticle;
+        // 드리프트가 유지되는 동안 재생할 파티클. 자식 파티클도 함께 재생한다.
+        [SerializeField] private ParticleSystem driftParticle;
+
+        [Header("Camera Speed Effect")]
+        // 일정 속도 이상에서 카메라에 속도감을 표현할 파티클
+        [SerializeField] private ParticleSystem speedParticle;
+        // 속도 파티클이 나타나기 시작하는 속도
+        [SerializeField, Min(0f)] private float speedEffectStartSpeed = 40f;
+        // 속도 파티클이 최대 강도에 도달하는 속도
+        [SerializeField, Min(0.1f)] private float speedEffectFullSpeed = 70f;
+        // 최대 속도에서 기존 파티클 방출량에 곱할 배율
+        [SerializeField, Min(0f)] private float speedEffectEmissionMultiplier = 2f;
+        // 속도에 따라 파티클 자체의 움직임이 빨라지는 최대 배율
+        [SerializeField, Min(0.1f)] private float speedEffectSimulationMultiplier = 1.6f;
+
+        [Header("Animation")]
+        // 부스터 상태를 IsBoost 파라미터로 전달할 플레이어 Animator
+        [SerializeField] private Animator playerAnimator;
+
         public float ForwardSpeed { get; private set; }
         public float Speed => _rigidbody == null ? 0f : _rigidbody.linearVelocity.magnitude;
         public bool IsGrounded { get; private set; }
@@ -105,6 +127,7 @@ namespace Member.KYM.Scripts.Players
         public float BoostMashProgress => requiredBoostMashCount <= 0
             ? 0f
             : (float)_boostMashCount / requiredBoostMashCount;
+        public float SpeedEffectAmount { get; private set; }
 
         private Rigidbody _rigidbody;
         private Vector3 _visualStartLocalPosition;
@@ -118,6 +141,12 @@ namespace Member.KYM.Scripts.Players
         private int _boostMashCount;
         private float _boostMashTimeRemaining;
         private float _boostTimeRemaining;
+        private bool _wasBoostParticlePlaying;
+        private bool _wasDriftParticlePlaying;
+        private bool _wasBoostAnimationActive;
+        private float _speedParticleBaseEmission = 1f;
+
+        private static readonly int IsBoostHash = Animator.StringToHash("IsBoost");
 
         private void Awake()
         {
@@ -140,6 +169,25 @@ namespace Member.KYM.Scripts.Players
             {
                 _lastBoostPressVersion = PlayerInput.BoostPressVersion;
             }
+
+            if (playerAnimator == null)
+            {
+                playerAnimator = GetComponentInChildren<Animator>(true);
+            }
+
+            if (playerAnimator != null)
+            {
+                playerAnimator.SetBool(IsBoostHash, false);
+            }
+
+            StopParticleImmediately(boostParticle);
+            StopParticleImmediately(driftParticle);
+            StopParticleImmediately(speedParticle);
+
+            if (speedParticle != null)
+            {
+                _speedParticleBaseEmission = speedParticle.emission.rateOverTimeMultiplier;
+            }
         }
 
         private void FixedUpdate()
@@ -160,6 +208,8 @@ namespace Member.KYM.Scripts.Players
                 && Mathf.Abs(input.x) >= minimumDriftSteeringInput;
 
             UpdateBoostSystem();
+            UpdateParticleEffects();
+            UpdateBoostAnimation();
 
             if (!IsGrounded)
             {
@@ -173,9 +223,25 @@ namespace Member.KYM.Scripts.Players
             LimitSpeed();
         }
 
+        private void OnDisable()
+        {
+            StopParticleImmediately(boostParticle);
+            StopParticleImmediately(driftParticle);
+            StopParticleImmediately(speedParticle);
+            _wasBoostParticlePlaying = false;
+            _wasDriftParticlePlaying = false;
+            _wasBoostAnimationActive = false;
+
+            if (playerAnimator != null)
+            {
+                playerAnimator.SetBool(IsBoostHash, false);
+            }
+        }
+
         private void LateUpdate()
         {
             ApplyWheelchairVisualFeedback();
+            UpdateCameraSpeedEffect();
         }
 
         private void UpdateGroundState()
@@ -344,6 +410,84 @@ namespace Member.KYM.Scripts.Players
             _boostTimeRemaining = boostDuration;
         }
 
+        private void UpdateParticleEffects()
+        {
+            SetParticleState(boostParticle, IsBoosting, ref _wasBoostParticlePlaying);
+            SetParticleState(driftParticle, IsDrifting, ref _wasDriftParticlePlaying);
+        }
+
+        private void SetParticleState(ParticleSystem particle, bool shouldPlay, ref bool wasPlaying)
+        {
+            if (particle == null || shouldPlay == wasPlaying)
+            {
+                return;
+            }
+
+            wasPlaying = shouldPlay;
+            if (shouldPlay)
+            {
+                particle.Play(true);
+            }
+            else
+            {
+                particle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            }
+        }
+
+        private void StopParticleImmediately(ParticleSystem particle)
+        {
+            if (particle != null)
+            {
+                particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+        }
+
+        private void UpdateCameraSpeedEffect()
+        {
+            if (speedParticle == null)
+            {
+                SpeedEffectAmount = 0f;
+                return;
+            }
+
+            float fullSpeed = Mathf.Max(speedEffectFullSpeed, speedEffectStartSpeed + 0.01f);
+            SpeedEffectAmount = Mathf.InverseLerp(speedEffectStartSpeed, fullSpeed, Speed);
+
+            if (SpeedEffectAmount <= 0.001f)
+            {
+                if (speedParticle.isPlaying)
+                {
+                    speedParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                }
+
+                return;
+            }
+
+            ParticleSystem.EmissionModule emission = speedParticle.emission;
+            emission.rateOverTimeMultiplier = _speedParticleBaseEmission
+                                              * Mathf.Lerp(0.25f, speedEffectEmissionMultiplier, SpeedEffectAmount);
+
+            ParticleSystem.MainModule main = speedParticle.main;
+            main.simulationSpeed = Mathf.Lerp(0.8f, speedEffectSimulationMultiplier, SpeedEffectAmount);
+
+            if (!speedParticle.isPlaying)
+            {
+                speedParticle.Play(true);
+            }
+        }
+
+        private void UpdateBoostAnimation()
+        {
+            bool shouldPlayBoostAnimation = IsBoosting;
+            if (playerAnimator == null || shouldPlayBoostAnimation == _wasBoostAnimationActive)
+            {
+                return;
+            }
+
+            _wasBoostAnimationActive = shouldPlayBoostAnimation;
+            playerAnimator.SetBool(IsBoostHash, shouldPlayBoostAnimation);
+        }
+
         private void ApplySteering(float steering)
         {
             float absoluteSpeed = Mathf.Abs(ForwardSpeed);
@@ -396,7 +540,7 @@ namespace Member.KYM.Scripts.Players
 
         private void ApplyDownforce()
         {
-            _rigidbody.AddForce(-transform.up * (downforce + Speed), ForceMode.Acceleration);
+            _rigidbody.AddForce(-transform.up * (downforce + (Speed / 2)), ForceMode.Acceleration);
         }
 
         private void LimitSpeed()
