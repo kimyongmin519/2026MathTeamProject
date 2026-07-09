@@ -1781,7 +1781,7 @@ Transform:
   m_GameObject: {fileID: 9200097634429018130}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5678136, y: -0.4211405, z: 0.55961746, w: 0.4325006}
-  m_LocalPosition: {x: -0.048809, y: 0.10484, z: 0.00076051}
+  m_LocalPosition: {x: -0.113, y: 0.113, z: 0.148}
   m_LocalScale: {x: 1, y: 0.76075935, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2307,14 +2307,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959333293903699421}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.07107589, y: -0.0029487705, z: 0.041347418, w: 0.9966092}
+  m_LocalRotation: {x: -0.3046483, y: 0.055621184, z: -0.32355025, w: 0.8940978}
   m_LocalPosition: {x: -0.0000000013969839, y: 0.1331438, z: 0.000000019208528}
   m_LocalScale: {x: 0.99999994, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3090193154517323676}
   m_Father: {fileID: 2576935399355230046}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -30.583, y: 20.153, z: -45.351}
 --- !u!1 &4738836739951606224
 GameObject:
   m_ObjectHideFlags: 0
@@ -2819,6 +2819,7 @@ MonoBehaviour:
   gasParticle: {fileID: 335604080102327589, guid: 044b12e30e1ec3940800e8a1996c8442, type: 3}
   boojickParticle: {fileID: 205613715772942740, guid: 0ed89a250a2b27545babacb75f4625c5, type: 3}
   butthole: {fileID: 1977593583}
+  animator: {fileID: 0}
 --- !u!4 &7601806302234362055
 Transform:
   m_ObjectHideFlags: 0
