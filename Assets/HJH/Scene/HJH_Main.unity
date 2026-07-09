@@ -648,6 +648,7 @@ GameObject:
   - component: {fileID: 1180303670}
   - component: {fileID: 1180303669}
   - component: {fileID: 1180303668}
+  - component: {fileID: 1180303671}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -722,13 +723,57 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1180303667}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.24819688, y: 0.47610193, z: -0.14209838, w: 0.8315848}
+  m_LocalPosition: {x: -2.14, y: 3.27, z: -3.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 33.237, y: 59.584, z: 0}
+--- !u!114 &1180303671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180303667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1514414834
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,6 +1024,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
+--- !u!1 &1977593583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1977593584}
+  m_Layer: 0
+  m_Name: Butthole
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1977593584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977593583}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0.49, z: 0.777}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5033040731495068446}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1981956265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,7 +1287,7 @@ Transform:
   m_GameObject: {fileID: 9175844511294571504}
   serializedVersion: 2
   m_LocalRotation: {x: 0.002919443, y: 0, z: -0, w: 0.99999577}
-  m_LocalPosition: {x: -0, y: 0.112302035, z: 0}
+  m_LocalPosition: {x: 0, y: 0.112302035, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1230,7 +1306,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.0068998137, y: 0.029054947, z: 0.12652212, w: 0.9915142}
   m_LocalPosition: {x: -0.046984665, y: 0.13179873, z: 0.001999139}
-  m_LocalScale: {x: 0.99999994, y: 1.0000001, z: 1.0000001}
+  m_LocalScale: {x: 0.9999999, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1057824214037932444}
@@ -1690,7 +1766,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.019893887, y: -0.034249887, z: -0.07915731, w: 0.996075}
   m_LocalPosition: {x: 0.024459872, y: 0.13763699, z: -0.0015036906}
-  m_LocalScale: {x: 0.99999994, y: 1, z: 0.99999994}
+  m_LocalScale: {x: 0.9999999, y: 1, z: 0.9999999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1817605969679702735}
@@ -1805,7 +1881,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.03963075, y: -0.025527265, z: -0.1617198, w: 0.98571014}
   m_LocalPosition: {x: 0.04701907, y: 0.13010012, z: 0.0036572032}
-  m_LocalScale: {x: 1, y: 0.99999994, z: 0.99999994}
+  m_LocalScale: {x: 1, y: 0.9999999, z: 0.9999999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2303472131296367532}
@@ -2249,6 +2325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5033040731495068446}
   - component: {fileID: 7442065924958049119}
+  - component: {fileID: 7442065924958049120}
   m_Layer: 0
   m_Name: Stickman
   m_TagString: Untagged
@@ -2296,15 +2373,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4738836739951606224}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0.70478, y: 0.25588, z: 0.22361}
   m_LocalScale: {x: 0.62781, y: 0.62781, z: 0.62781}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6710425230909863480}
   - {fileID: 3899800983961833983}
+  - {fileID: 1977593584}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &5089466961747400402
 GameObject:
   m_ObjectHideFlags: 0
@@ -2410,7 +2488,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.022815976, y: 0.012228168, z: 0.33390343, w: 0.9422518}
   m_LocalPosition: {x: -0.03537252, y: 0.04365972, z: 0.0028788392}
-  m_LocalScale: {x: 0.99999994, y: 1, z: 1.0000001}
+  m_LocalScale: {x: 0.9999999, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9108407945706406902}
@@ -2474,7 +2552,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.009049846, y: 0.029849445, z: 0.03232068, w: 0.9989908}
   m_LocalPosition: {x: 0.006740067, y: 0.13582563, z: -0.0035970584}
-  m_LocalScale: {x: 1, y: 0.99999994, z: 1.0000001}
+  m_LocalScale: {x: 1, y: 0.99999994, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9013349354063427324}
@@ -2554,7 +2632,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.033219054, y: 0.020815158, z: -0.31741345, w: 0.9474766}
   m_LocalPosition: {x: 0.03254211, y: 0.042982846, z: 0.0026844416}
-  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
+  m_LocalScale: {x: 0.9999999, y: 0.99999994, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4528380557470642817}
@@ -2586,7 +2664,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.031838994, y: -0.03210033, z: 0.08118351, w: 0.99567324}
   m_LocalPosition: {x: -0.030693967, y: 0.13830468, z: -0.0016284068}
-  m_LocalScale: {x: 1.0000001, y: 0.99999994, z: 1}
+  m_LocalScale: {x: 1, y: 0.9999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9174925937941471367}
@@ -2666,7 +2744,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.01806745, y: 0.02945369, z: -0.110554904, w: 0.9932692}
   m_LocalPosition: {x: 0.029996779, y: 0.13327865, z: -0.0016682371}
-  m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
+  m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7191570776919073487}
@@ -2713,7 +2791,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4738836739951606224}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 36078ea4a8c3073418bc0cf00732b38f, type: 3}
+  m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 8a83febfebd573443ac1818caaa61d45, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -2721,15 +2799,26 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'mixamorig:RightUpLeg'\n\tTransform 'mixamorig:LeftUpLeg'\n\tTransform
-    'mixamorig:RightUpLeg'\n\tTransform 'mixamorig:LeftUpLeg'\n\tFrom animation clip
-    'Boojick'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7442065924958049120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738836739951606224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f54cd806eac61343bef6455a10411c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Boojick
+  gasParticle: {fileID: 335604080102327589, guid: 044b12e30e1ec3940800e8a1996c8442, type: 3}
+  boojickParticle: {fileID: 205613715772942740, guid: 0ed89a250a2b27545babacb75f4625c5, type: 3}
+  butthole: {fileID: 1977593583}
 --- !u!4 &7601806302234362055
 Transform:
   m_ObjectHideFlags: 0
@@ -2772,7 +2861,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.0009818595, y: 0.029483438, z: 0.07334956, w: 0.9968699}
   m_LocalPosition: {x: -0.02229429, y: 0.13786589, z: 0.0005817659}
-  m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8388580969569509928}
