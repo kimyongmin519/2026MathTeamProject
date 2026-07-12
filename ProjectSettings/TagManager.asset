@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Missile
   layers:
   - Default
   - TransparentFX
@@ -11,12 +12,12 @@ TagManager:
   - Ground
   - Water
   - UI
+  - Player
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - UiView
   - 
   - 
   - 

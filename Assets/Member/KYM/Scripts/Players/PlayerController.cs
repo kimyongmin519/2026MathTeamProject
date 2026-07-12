@@ -1,5 +1,6 @@
 using Member.KYM.Scripts.CoreSystems;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Member.KYM.Scripts.Players
 {
@@ -115,6 +116,14 @@ namespace Member.KYM.Scripts.Players
         // 부스터 상태를 IsBoost 파라미터로 전달할 플레이어 Animator
         [SerializeField] private Animator playerAnimator;
 
+        [Header("Sound Events")]
+        // 부스트가 시작되는 순간 한 번 호출됩니다. PlayerSoundPlayer.PlayClip(AudioClip)을 연결해 부스트 사운드를 재생할 수 있습니다.
+        [SerializeField] private UnityEvent onBoostStarted;
+        // 드리프트 상태로 진입하는 순간 한 번 호출됩니다. PlayerSoundPlayer.PlayClip(AudioClip)을 연결해 드리프트 사운드를 재생할 수 있습니다.
+        [SerializeField] private UnityEvent onDriftStarted;
+        // 드리프트 상태가 끝나는 순간 한 번 호출됩니다. PlayerSoundPlayer.StopLoopClip()을 연결해 드리프트 루프 사운드를 멈출 수 있습니다.
+        [SerializeField] private UnityEvent onDriftEnded;
+
         public float ForwardSpeed { get; private set; }
         public float Speed => _rigidbody == null ? 0f : _rigidbody.linearVelocity.magnitude;
         public bool IsGrounded { get; private set; }
@@ -202,10 +211,20 @@ namespace Member.KYM.Scripts.Players
             UpdateLocalSpeed();
             UpdateVisualValues(input.x);
 
+            bool wasDrifting = IsDrifting;
             IsDrifting = IsGrounded
                 && PlayerInput.IsDrifting
                 && Mathf.Abs(ForwardSpeed) >= minimumDriftSpeed
                 && Mathf.Abs(input.x) >= minimumDriftSteeringInput;
+
+            if (IsDrifting && !wasDrifting)
+            {
+                onDriftStarted?.Invoke();
+            }
+            else if (!IsDrifting && wasDrifting)
+            {
+                onDriftEnded?.Invoke();
+            }
 
             UpdateBoostSystem();
             UpdateParticleEffects();
@@ -225,6 +244,12 @@ namespace Member.KYM.Scripts.Players
 
         private void OnDisable()
         {
+            if (IsDrifting)
+            {
+                onDriftEnded?.Invoke();
+                IsDrifting = false;
+            }
+
             StopParticleImmediately(boostParticle);
             StopParticleImmediately(driftParticle);
             StopParticleImmediately(speedParticle);
@@ -408,6 +433,7 @@ namespace Member.KYM.Scripts.Players
             _boostMashCount = 0;
             _boostMashTimeRemaining = 0f;
             _boostTimeRemaining = boostDuration;
+            onBoostStarted?.Invoke();
         }
 
         private void UpdateParticleEffects()
