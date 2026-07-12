@@ -94,6 +94,18 @@ namespace Member.KYM.Scripts.Players
         // 부스터 중 적용되는 최대 전진 속도
         [SerializeField, Min(0.1f)] private float boostMaxSpeed = 38f;
 
+        [Header("Boost Collision")]
+        // 부스트 충돌 판정에 사용할 장애물 레이어. 바닥 충돌은 접촉면 각도로 별도 제외합니다.
+        [SerializeField] private LayerMask boostCrashObstacleLayers = ~0;
+        // 장애물에 부딪혔을 때 충돌 지점 반대 방향으로 튕겨 나가는 속도입니다.
+        [SerializeField, Min(0f)] private float boostCrashBounceSpeed = 5f;
+        // 충돌 시 살짝 들리는 느낌을 주는 위쪽 속도입니다.
+        [SerializeField, Min(0f)] private float boostCrashUpwardSpeed = 0.8f;
+        // 충돌 직후 드리프트 조향이 다시 적용되어 빙글 도는 것을 막는 짧은 조작 잠금 시간입니다.
+        [SerializeField, Min(0f)] private float boostCrashSteeringLockDuration = 0.2f;
+        // 이 값보다 위를 향한 접촉면은 바닥이나 경사로로 보고 부스트 충돌에서 제외합니다.
+        [SerializeField, Range(0f, 1f)] private float boostCrashGroundNormalThreshold = 0.55f;
+
         [Header("Particle Effects")]
         // 부스터가 유지되는 동안 재생할 파티클. 자식 파티클도 함께 재생한다.
         [SerializeField] private ParticleSystem boostParticle;
@@ -150,6 +162,7 @@ namespace Member.KYM.Scripts.Players
         private int _boostMashCount;
         private float _boostMashTimeRemaining;
         private float _boostTimeRemaining;
+        private float _boostCrashSteeringLockRemaining;
         private bool _wasBoostParticlePlaying;
         private bool _wasDriftParticlePlaying;
         private bool _wasBoostAnimationActive;
@@ -207,12 +220,16 @@ namespace Member.KYM.Scripts.Players
             }
 
             Vector2 input = Vector2.ClampMagnitude(PlayerInput.InputDirection, 1f);
+            _boostCrashSteeringLockRemaining = Mathf.Max(
+                0f,
+                _boostCrashSteeringLockRemaining - Time.fixedDeltaTime);
             UpdateGroundState();
             UpdateLocalSpeed();
             UpdateVisualValues(input.x);
 
             bool wasDrifting = IsDrifting;
             IsDrifting = IsGrounded
+                && _boostCrashSteeringLockRemaining <= 0f
                 && PlayerInput.IsDrifting
                 && Mathf.Abs(ForwardSpeed) >= minimumDriftSpeed
                 && Mathf.Abs(input.x) >= minimumDriftSteeringInput;
@@ -436,6 +453,56 @@ namespace Member.KYM.Scripts.Players
             onBoostStarted?.Invoke();
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!IsBoosting || collision.contactCount == 0)
+            {
+                return;
+            }
+
+            int collisionLayerMask = 1 << collision.gameObject.layer;
+            if ((boostCrashObstacleLayers.value & collisionLayerMask) == 0)
+            {
+                return;
+            }
+
+            ContactPoint contact = collision.GetContact(0);
+            float upwardFacingAmount = Mathf.Abs(Vector3.Dot(contact.normal, transform.up));
+            if (upwardFacingAmount > boostCrashGroundNormalThreshold)
+            {
+                return;
+            }
+
+            StopBoostFromCrash(contact.point);
+        }
+
+        private void StopBoostFromCrash(Vector3 hitPoint)
+        {
+            _boostTimeRemaining = 0f;
+            _boostMashCount = 0;
+            _boostMashTimeRemaining = 0f;
+            _boostCrashSteeringLockRemaining = boostCrashSteeringLockDuration;
+
+            // 드리프트와 충돌로 남은 회전 관성을 제거해 충돌 직후 빙글 도는 현상을 막습니다.
+            _rigidbody.angularVelocity = Vector3.zero;
+
+            Vector3 bounceDirection = Vector3.ProjectOnPlane(
+                _rigidbody.worldCenterOfMass - hitPoint,
+                transform.up).normalized;
+
+            if (bounceDirection.sqrMagnitude < 0.001f)
+            {
+                bounceDirection = -transform.forward;
+            }
+
+            float verticalSpeed = Vector3.Dot(_rigidbody.linearVelocity, transform.up);
+            _rigidbody.linearVelocity = bounceDirection * boostCrashBounceSpeed
+                                        + transform.up * Mathf.Max(verticalSpeed, boostCrashUpwardSpeed);
+
+            UpdateParticleEffects();
+            UpdateBoostAnimation();
+        }
+
         private void UpdateParticleEffects()
         {
             SetParticleState(boostParticle, IsBoosting, ref _wasBoostParticlePlaying);
@@ -516,6 +583,11 @@ namespace Member.KYM.Scripts.Players
 
         private void ApplySteering(float steering)
         {
+            if (_boostCrashSteeringLockRemaining > 0f)
+            {
+                return;
+            }
+
             float absoluteSpeed = Mathf.Abs(ForwardSpeed);
             if (absoluteSpeed < minimumSpeedToSteer || Mathf.Abs(steering) < 0.01f)
             {
