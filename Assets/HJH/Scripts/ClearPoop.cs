@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,6 +8,13 @@ public class ClearPoop : MonoBehaviour
     public UnityEvent onClear;
     private bool isCleared;
 
+    [SerializeField] private TextMeshProUGUI clearText;
+
+    private void Start()
+    {
+        clearText.gameObject.SetActive(false);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (isCleared) return;
@@ -15,5 +23,10 @@ public class ClearPoop : MonoBehaviour
         isCleared = true;
         babyTimer.StopTimer();
         onClear?.Invoke();
+    }
+
+    public void Clear()
+    {
+        clearText.gameObject.SetActive(true);
     }
 }
