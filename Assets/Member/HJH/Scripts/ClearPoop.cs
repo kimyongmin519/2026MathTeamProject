@@ -36,6 +36,6 @@ public class ClearPoop : MonoBehaviour
     {
         clearText.gameObject.SetActive(true);
         yield return new WaitForSeconds(2f);
-        clearText.text = "I'm Yongmin who was born in 25, but your butt is nothing~";
+        clearText.text = "25년생 용민이 형인데 ㅋ, 엉덩이 무하자야~";
     }
 }
