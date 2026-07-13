@@ -10,6 +10,10 @@ namespace Member.KYM.Scripts.Players
         // 플레이어의 이동 방향과 드리프트 버튼 상태를 전달하는 입력 데이터
         [field: SerializeField] public PlayerInputSO PlayerInput { get; private set; }
 
+        [Header("Input")]
+        // 체크하면 조작 가능한 상태로 시작하고, 해제하면 입력이 차단된 상태로 시작합니다.
+        [SerializeField] private bool inputEnabledOnStart = true;
+
         [Header("Speed")]
         // 전진할 때 차량을 밀어주는 가속력. 높을수록 최고속도에 빨리 도달한다.
         [SerializeField, Min(0f)] private float acceleration = 32f;
@@ -153,6 +157,7 @@ namespace Member.KYM.Scripts.Players
             ? 0f
             : (float)_boostMashCount / requiredBoostMashCount;
         public float SpeedEffectAmount { get; private set; }
+        public bool IsInputEnabled { get; private set; } = true;
 
         private Rigidbody _rigidbody;
         private Vector3 _visualStartLocalPosition;
@@ -179,6 +184,8 @@ namespace Member.KYM.Scripts.Players
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.centerOfMass = centerOfMass;
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            BoostGauge01 = 1f;
+            IsInputEnabled = inputEnabledOnStart;
 
             if (visualRoot == null)
             {
@@ -216,6 +223,32 @@ namespace Member.KYM.Scripts.Players
             }
         }
 
+        /// <summary>
+        /// 플레이어의 이동, 조향, 드리프트 및 새 부스트 입력을 활성화하거나 차단합니다.
+        /// </summary>
+        public void SetInputEnabled(bool isEnabled)
+        {
+            if (IsInputEnabled == isEnabled)
+            {
+                return;
+            }
+
+            IsInputEnabled = isEnabled;
+            _boostMashCount = 0;
+            _boostMashTimeRemaining = 0f;
+
+            if (PlayerInput != null)
+            {
+                _lastBoostPressVersion = PlayerInput.BoostPressVersion;
+            }
+
+            if (!isEnabled && IsDrifting)
+            {
+                IsDrifting = false;
+                onDriftEnded?.Invoke();
+            }
+        }
+
         private void FixedUpdate()
         {
             if (PlayerInput == null)
@@ -223,7 +256,9 @@ namespace Member.KYM.Scripts.Players
                 return;
             }
 
-            Vector2 input = Vector2.ClampMagnitude(PlayerInput.InputDirection, 1f);
+            Vector2 input = IsInputEnabled
+                ? Vector2.ClampMagnitude(PlayerInput.InputDirection, 1f)
+                : Vector2.zero;
             _boostCrashSteeringLockRemaining = Mathf.Max(
                 0f,
                 _boostCrashSteeringLockRemaining - Time.fixedDeltaTime);
@@ -233,6 +268,7 @@ namespace Member.KYM.Scripts.Players
 
             bool wasDrifting = IsDrifting;
             IsDrifting = IsGrounded
+                && IsInputEnabled
                 && _boostCrashSteeringLockRemaining <= 0f
                 && PlayerInput.IsDrifting
                 && Mathf.Abs(ForwardSpeed) >= minimumDriftSpeed
@@ -416,6 +452,14 @@ namespace Member.KYM.Scripts.Players
 
         private void ProcessBoostMashInput()
         {
+            if (!IsInputEnabled)
+            {
+                _boostMashCount = 0;
+                _boostMashTimeRemaining = 0f;
+                _lastBoostPressVersion = PlayerInput.BoostPressVersion;
+                return;
+            }
+
             if (!IsBoostReady || IsBoosting)
             {
                 _boostMashCount = 0;
