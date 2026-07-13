@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,6 +29,13 @@ public class ClearPoop : MonoBehaviour
 
     public void Clear()
     {
+        StartCoroutine(ClearTime());
+    }
+
+    private IEnumerator ClearTime()
+    {
         clearText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        clearText.text = "I'm Yongmin who was born in 25, but your butt is nothing~";
     }
 }
