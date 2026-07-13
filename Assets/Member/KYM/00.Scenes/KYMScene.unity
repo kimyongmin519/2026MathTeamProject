@@ -310,6 +310,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2759476107228871603, guid: acf0eee5a629e8446a2a83a5b91dc18e, type: 3}
+      propertyPath: Target.TrackingTarget
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2939856572597894888, guid: acf0eee5a629e8446a2a83a5b91dc18e, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -475,7 +479,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 976744435425010336, guid: acf0eee5a629e8446a2a83a5b91dc18e, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: acf0eee5a629e8446a2a83a5b91dc18e, type: 3}
@@ -549,8 +554,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 590235510}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 69.4, y: 2, z: 9.3}
+  m_LocalRotation: {x: -0, y: -0.999882, z: -0, w: -0.015369007}
+  m_LocalPosition: {x: -69.75367, y: 0.5, z: 18.76764}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -771,8 +776,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1597005523}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000005059705, y: -0.98994124, z: 0.14147961, w: -0.00000035403056}
-  m_LocalPosition: {x: -68.96097, y: 0.48515564, z: 21.489246}
+  m_LocalRotation: {x: 0, y: -0.999882, z: 0, w: -0.015369007}
+  m_LocalPosition: {x: -69.75367, y: 0.5, z: 18.76764}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6058,31 +6063,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 69.4
+      value: -69.6
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.3
+      value: 13.77
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.015369007
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.999882
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6090,7 +6095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -181.761
       objectReference: {fileID: 0}
     - target: {fileID: 2068342822937602248, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -6106,11 +6111,11 @@ PrefabInstance:
       objectReference: {fileID: 198893392290562349}
     - target: {fileID: 2253535423503705309, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: maxForwardSpeed
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2253535423503705309, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: maxReverseSpeed
-      value: 7
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2253535423503705309, guid: 062ca5351cebfa14c9fcc22225f89356, type: 3}
       propertyPath: minimumSpeedToSteer

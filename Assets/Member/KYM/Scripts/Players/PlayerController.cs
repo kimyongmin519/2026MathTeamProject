@@ -31,8 +31,12 @@ namespace Member.KYM.Scripts.Players
         [SerializeField, Range(0.1f, 1f)] private float minimumSteeringAtTopSpeed = 0.42f;
         // 제자리 회전을 막기 위해 조향을 허용하기 시작하는 최소 속도
         [SerializeField, Min(0f)] private float minimumSpeedToSteer = 0.4f;
-        // 드리프트 중 일반 조향력에 곱하는 회전 배율
+        // 드리프트를 시작할 수 있는 속도에서 적용되는 최소 회전 배율
         [SerializeField, Min(1f)] private float driftSteeringMultiplier = 1.8f;
+        // 최고 속도에 가까운 드리프트에서 적용되는 최대 회전 배율
+        [SerializeField, Min(1f)] private float driftSteeringAtTopSpeedMultiplier = 3.2f;
+        // 속도에 따른 드리프트 회전력 증가 곡선. 1은 선형, 높을수록 고속 구간에서 빠르게 증가한다.
+        [SerializeField, Min(0.1f)] private float driftSteeringSpeedResponse = 1.2f;
 
         [Header("Grip & Drift")]
         // 일반 주행 중 옆으로 미끄러지는 속도를 줄이는 접지력
@@ -594,12 +598,28 @@ namespace Member.KYM.Scripts.Players
                 return;
             }
 
-            float speedRatio = Mathf.Clamp01(absoluteSpeed / maxForwardSpeed);
-            float steeringAtSpeed = Mathf.Lerp(1f, minimumSteeringAtTopSpeed, speedRatio);
-            float driftMultiplier = IsDrifting ? driftSteeringMultiplier : 1f;
+            float steeringStrength;
+            if (IsDrifting)
+            {
+                float driftSpeedRatio = Mathf.InverseLerp(
+                    minimumDriftSpeed,
+                    Mathf.Max(minimumDriftSpeed + 0.01f, boostMaxSpeed),
+                    Speed);
+                float shapedDriftSpeedRatio = Mathf.Pow(driftSpeedRatio, driftSteeringSpeedResponse);
+                steeringStrength = Mathf.Lerp(
+                    driftSteeringMultiplier,
+                    driftSteeringAtTopSpeedMultiplier,
+                    shapedDriftSpeedRatio);
+            }
+            else
+            {
+                float speedRatio = Mathf.Clamp01(absoluteSpeed / maxForwardSpeed);
+                steeringStrength = Mathf.Lerp(1f, minimumSteeringAtTopSpeed, speedRatio);
+            }
+
             float reverseDirection = ForwardSpeed >= 0f ? 1f : -1f;
-            float yaw = steering * steeringDegreesPerSecond * steeringAtSpeed
-                        * driftMultiplier * reverseDirection * Time.fixedDeltaTime;
+            float yaw = steering * steeringDegreesPerSecond * steeringStrength
+                        * reverseDirection * Time.fixedDeltaTime;
 
             _rigidbody.MoveRotation(_rigidbody.rotation * Quaternion.Euler(0f, yaw, 0f));
 
