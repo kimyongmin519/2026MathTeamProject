@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb71a9ae944275409bda15edd33ff40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleSceneManager
-  gameSceneName: GameScene
+  gameSceneName: MainGame
 --- !u!1 &798830734
 GameObject:
   m_ObjectHideFlags: 0
