@@ -13,11 +13,14 @@ public class BabyTimer : MonoBehaviour
     private bool isRunning;
     private bool hasPooped;
 
+    public GameObject a;
+
     public void StartTimer()
     {
         elapsedTime = 0f;
         isRunning = true;
         hasPooped = false;
+        a.SetActive(false);
     }
 
     public void StopTimer()

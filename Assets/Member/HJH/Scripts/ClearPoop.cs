@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,6 +29,13 @@ public class ClearPoop : MonoBehaviour
 
     public void Clear()
     {
+        StartCoroutine(ClearTime());
+    }
+
+    private IEnumerator ClearTime()
+    {
         clearText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        clearText.text = "25년생 용민이 형인데 ㅋ, 엉덩이 무하자야~";
     }
 }
